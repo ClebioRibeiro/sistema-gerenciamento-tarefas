@@ -158,10 +158,3 @@ void listar(char a[10][3][50])
     }
 } // fim listar
 
-
-/*
-            if(strlen(a[i][j]) > 0 && a[i][j][strlen(a[i][j]) - 1] ==   '\n')
-            {
-                a[i][j][strlen(a[i][j]) - 1] = '\0';
-            }*/
-            // fim tirar quebra de linha ('\n') da string
