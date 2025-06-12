@@ -1,13 +1,21 @@
 #include <stdio.h>
-#include <string.h> // Para strlen, strcpy, strcmp
+#include <string.h> 
 
-// --- DECLARACAO DE FUNCOES (adicione a nova funcao aqui) ---
+// --------------------------- DECLARACAO DE FUNCOES ---------------------------
 void adicionarTarefa(char a[10][3][50], char b[3][50]);
 void listar(char a[10][3][50]);
 void editarTarefa(char a[10][3][50]);
-void excluirTarefa(char a[10][3][50]); // <-- Nova função
+void excluirTarefa(char a[10][3][50]);
+void salvarTarefas(char a[10][3][50]);
 
-// --- INT MAIN (continua o mesmo, mas precisará adicionar a opção) ---
+/*
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+------------------------------ INT MAIN -----------------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+*/
+
 int main()
 {
     char m[10][3][50], v[3][50], str[] = " - ";
@@ -22,6 +30,7 @@ int main()
         }
     }
 
+
     printf("Sistema de Gerenciamento de Tarefas\n");
 
     // Loop principal do menu
@@ -31,7 +40,8 @@ int main()
         printf("1 - Adicionar Tarefa\n");
         printf("2 - Listar Tarefas\n");
         printf("3 - Editar Tarefa\n");
-        printf("4 - Excluir Tarefa\n"); // <-- Nova opção
+        printf("4 - Excluir Tarefa\n");
+        printf("5 - Salvar Tarefas\n");
         printf("6 - Sair\n");
         printf("Escolha uma opcao: ");
 
@@ -49,8 +59,11 @@ int main()
             case 3:
                 editarTarefa(m);
                 break;
-            case 4: // Novo case para excluir
+            case 4:
                 excluirTarefa(m);
+                break;
+            case 5:
+                salvarTarefas(m);
                 break;
             case 6:
                 printf("Saindo do sistema. Ate mais!\n");
@@ -64,7 +77,21 @@ int main()
     return 0;
 }
 
-// --- FUNCOES (adicionarTarefas e listar continuam as mesmas da resposta anterior) ---
+/*
+
+---------------------------------------------------------------------------------------------
+------------------------------ FUNÇOES ------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+*/
+
+/*
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+------------------------------ ADICIONAR TAREFAS --------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+*/
 
 void adicionarTarefa(char a[10][3][50], char b[3][50])
 {
@@ -127,6 +154,14 @@ void listar(char a[10][3][50])
     }
     printf("------------------------------------------------------------------\n");
 }
+
+/*
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+------------------------------ EDIATR TAREFAS -----------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+*/
 
 void editarTarefa(char a[10][3][50])
 {
@@ -194,63 +229,98 @@ void editarTarefa(char a[10][3][50])
     printf("Tarefa editada com sucesso!\n");
 }
 
-// --- NOVA FUNÇÃO: EXCLUIR TAREFA ---
+/*
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+------------------------------ EXCLUIR TAREFAS ----------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+*/
+
 void excluirTarefa(char a[10][3][50])
 {
     int numeroTarefa;
     int i, j;
-    char str_vazio[] = " - "; // String para marcar como vazio
+    char str_vazio[] = " - ";
 
-    listar(a); // Primeiro, lista as tarefas para o usuário saber qual excluir
+    listar(a);
 
     printf("\n--- EXCLUIR TAREFA ---\n");
     printf("Digite o numero da tarefa que deseja excluir (0 para cancelar): ");
     scanf("%d", &numeroTarefa);
-    while (getchar() != '\n' && getchar() != EOF); // Limpa o buffer
+    while (getchar() != '\n' && getchar() != EOF);
 
     if (numeroTarefa == 0) {
         printf("Exclusao cancelada.\n");
-        return; // Sai da função
+        return;
     }
 
-    // Ajusta o número da tarefa para o índice do array (ex: 1 -> 0, 2 -> 1)
     int indiceExcluir = numeroTarefa - 1;
 
-    // Valida o índice da tarefa
     if (indiceExcluir < 0 || indiceExcluir >= 10 || strcmp(a[indiceExcluir][0], " - ") == 0)
     {
         printf("Numero de tarefa invalido ou tarefa nao existente.\n");
         return;
     }
 
-    // Confirmacao (boa prática antes de excluir dados)
     printf("Tem certeza que deseja excluir a tarefa '%s'? (S/N): ", a[indiceExcluir][0]);
     char confirmacao;
-    scanf(" %c", &confirmacao); // O espaço antes de %c ignora whitespaces, incluindo o \n anterior
-    while (getchar() != '\n' && getchar() != EOF); // Limpa o buffer
+    scanf(" %c", &confirmacao);
+    while (getchar() != '\n' && getchar() != EOF);
 
     if (confirmacao == 'S' || confirmacao == 's') {
-        // Mover as tarefas seguintes uma posição para cima
-        // Isso preenche o "buraco" deixado pela tarefa excluída
-        for (i = indiceExcluir; i < 9; i++) // Vai até o penúltimo elemento (índice 8)
+        for (i = indiceExcluir; i < 9; i++)
         {
             for (j = 0; j < 3; j++)
             {
-                // Copia a tarefa da linha 'i+1' para a linha 'i'
                 strcpy(a[i][j], a[i+1][j]);
             }
         }
 
-        // A última linha (índice 9) agora pode conter uma cópia duplicada
-        // ou o valor original se a penúltima linha foi a excluída.
-        // Precisamos marcá-la como vazia.
         for (j = 0; j < 3; j++)
         {
-            strcpy(a[9][j], str_vazio); // Marca a última linha como vazia
+            strcpy(a[9][j], str_vazio);
         }
 
         printf("Tarefa excluida com sucesso!\n");
     } else {
         printf("Exclusao cancelada.\n");
     }
+}
+
+
+/*
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+------------------------------ SALVAR TAREFAS -----------------------------------------------
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+*/
+void salvarTarefas(char a[10][3][50])
+{
+    FILE *arquivo;
+    int i;
+
+    arquivo = fopen("tarefas.txt", "w");
+
+    
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo 'tarefas.txt' para escrita.\n");
+        return; // Sair da função se não conseguir abrir o arquivo
+    }
+
+    
+    for (i = 0; i < 10; i++)
+    {
+        // Só salva a linha se ela não estiver vazia (não for " - ")
+        if (strcmp(a[i][0], " - ") != 0)
+        {
+            
+            fprintf(arquivo, "%s;%s;%s\n", a[i][0], a[i][1], a[i][2]);
+        }
+    }
+
+    
+    fclose(arquivo);
+    printf("Tarefas salvas com sucesso em 'tarefas.txt'!\n");
 }

@@ -1,0 +1,4 @@
+Contratar Colaboradores;Alta;concluido
+Cadastrar Contratados;Alta;concluido
+Impostos;Media;pendente
+Pagar Sal rio de Escravos;Baixa;pendente
