@@ -6,8 +6,8 @@
 -------------- DEFINICOES DE FUNCOES ABAIXO DO INT MAIN -------------------
 ---------------------------------------------------------------------------
 */
-void adicionarTarefa(char a[10][3][50], char b[3][50]); 
-void listar(char a[10][3][50]);
+void add(char a[10][3][50], char b[3][50]); 
+void listar();
 
 
 /*
@@ -18,20 +18,20 @@ void listar(char a[10][3][50]);
 int main()
 {
     char m[10][3][50], v[3][50], str[] = " - ";; // titulo prioridade status
-    int swt, c, l, q;
+    int swt, c, i, j;
 
-    for(l=0;l<10;l++)
+    for(i=0;i<10;i++)
     {
-        for(c=0;c<3;c++)
+        for(j=0;j<3;j++)
         {
-                strcpy(m[l][c], str); 
+                strcpy(m[i][j], str); 
         }      
     }
 
     printf("Sistema de Gerenciamento de Tarefas\n");
-    printf("1 - Adicionar\n2 - Listar\n6 - Sair\n");
+    printf("1 - Adicionar\n2 - Listar\n5 - Sair\n");
     scanf("%d", &swt);
-    while ((q = getchar()) != '\n' && q != EOF);
+    while ((c = getchar()) != '\n' && c != EOF);
 
     
 
@@ -40,7 +40,7 @@ int main()
         switch(swt)
         {
             case 1:
-            adicionarTarefa(m, v);
+            add(m, v);
             break;
 
             case 2:
@@ -54,9 +54,9 @@ int main()
         } // fim switch
 
         printf("\nContinuar?\n");
-        printf("1 - Adicionar\n2 - Listar\n6 - Sair\n");
+        printf("1 - Adicionar\n2 - Listar\n5 - Sair\n");
         scanf("%d", &swt);
-        while ((q = getchar()) != '\n' && q != EOF);
+        while ((c = getchar()) != '\n' && c != EOF);
 
     } // fim while
     
@@ -89,47 +89,38 @@ void adicionarTarefa(char a[10][3][50], char b[3][50])
     {
         switch(i)
         {
-            case 0:
+            case 1:
             printf("Tarefa:");
             break;
 
-            case 1:
+            case 2:
             printf("Prioridade:");
             break;
 
-            case 2:
+            case 3:
             printf("Status:");
             break;
         }
 
         fgets(b[i], 50, stdin);
-        
-        if (strlen(b[i]) > 0 && b[i][strlen(b[i]) - 1] == '\n')
-        {
-            b[i][strlen(b[i]) - 1] = '\0';
-        }
     }
 
 
     for(i=0;i<10;i++)
     {
-        
-        
+        if(strcmp(a[i][j], " - ") == 0)
+        {
             for(j=0;j<3;j++)
             {
-                if(strcmp(a[i][j], " - ") == 0)
-                {
-                    strcpy(a[i][j], b[j]);
-                    if(j == 2)
-                    {
-                        i=10;
-                    }
-                }
-                
-            }   
+                a[i][j][50] = b[j][50];
+            }
+            i = 10;
+        }
+        else
+        {
+            i = 10;
+        }     
     }
-
-    printf("Tarefa Adicionada!");
 
     
         
